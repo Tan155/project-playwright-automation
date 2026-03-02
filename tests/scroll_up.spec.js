@@ -14,7 +14,7 @@ test('scroll_up', async ({ page }) => {
           }
         }, 100);
       });
-    }, distance); // ส่งค่า distance เข้าไปใน evaluate ด้วย
+    }, distance); 
   }
 
   //1)main page
@@ -23,36 +23,41 @@ test('scroll_up', async ({ page }) => {
   await page.waitForTimeout(500);
   await page.locator('#scrollUp').click();
   await page.waitForTimeout(500);
+  await expect(page.getByRole('link', { name: 'Website for automation' })).toBeVisible();
 
-  //4)signin-login page
+  //2)signin-login page
     await page.getByRole('link', { name: ' Signup / Login' }).click();
     await scrollToBottom(page,100);
     await page.waitForTimeout(500);
     await page.locator('#scrollUp').click();
     await page.waitForTimeout(500);
+    await expect(page.getByRole('link', { name: 'Website for automation' })).toBeVisible();
 
-  //2)product page
+  //3)product page
   await page.getByRole('link', { name: ' Products' }).click();
   await scrollToBottom(page);
   await page.waitForTimeout(500);
   await page.locator('#scrollUp').click();
   await page.waitForTimeout(500);
+  await expect(page.getByRole('link', { name: 'Website for automation' })).toBeVisible();
   
 
-  //5)test case page
+  //4)test case page
     await page.getByRole('link', { name: ' Test Cases' }).click();
     await scrollToBottom(page);
     await page.waitForTimeout(500);
     await page.locator('#scrollUp').click();
     await page.waitForTimeout(500);
+    await expect(page.getByRole('link', { name: 'Website for practice' })).toBeVisible();
 
 
-    //7)contact page 
+    //5)contact page 
     await page.getByRole('link', { name: ' Contact us' }).click();
     await scrollToBottom(page,50);
     await page.waitForTimeout(500);
     await page.locator('#scrollUp').click();
     await page.waitForTimeout(500);
+    await expect(page.getByRole('link', { name: 'Website for automation' })).toBeVisible();
 
   //6)api test page
     await page.getByRole('link', { name: ' API Testing' }).click();
@@ -60,5 +65,5 @@ test('scroll_up', async ({ page }) => {
     await page.waitForTimeout(500);
     await page.locator('#scrollUp').click();
     await page.waitForTimeout(500);
-
+    await expect(page.getByRole('link', { name: 'Website for practice' })).toBeVisible();
 });

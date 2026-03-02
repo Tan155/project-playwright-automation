@@ -2,6 +2,8 @@ import { test, expect } from '@playwright/test';
 
 test('subscription', async ({ page }) => {
   await page.goto('https://automationexercise.com/');
+  await expect(page).toHaveURL('https://automationexercise.com/');
+
   await page.evaluate(async () => {
     await new Promise((resolve) => {
       let totalHeight = 0;
@@ -9,26 +11,32 @@ test('subscription', async ({ page }) => {
       const timer = setInterval(() => {
         window.scrollBy(0, distance);
         totalHeight += distance;
-        if (totalHeight >= document.body.scrollHeight - 1000) {
+        if (totalHeight >= document.body.scrollHeight) {
           clearInterval(timer);
           resolve();
         }
       }, 100);
     });
   });
-  await page.waitForTimeout(2000);
-  await page.getByRole('textbox', { name: 'Your email address' }).click();
-  await page.waitForTimeout(2000);
+
+  await expect(page.getByRole('textbox', { name: 'Your email address' })).toBeVisible();
+
+  // test by 'e'
   await page.getByRole('textbox', { name: 'Your email address' }).fill('e');
-  await page.waitForTimeout(2000);
   await page.locator('#subscribe').click();
-  await page.waitForTimeout(2000);
+  await page.waitForTimeout(1000);
+  await expect(page.getByText('You have been successfully subscribed!')).not.toBeVisible();
+
+  // test by 'e@'
   await page.getByRole('textbox', { name: 'Your email address' }).fill('e@');
-  await page.waitForTimeout(2000);
   await page.locator('#subscribe').click();
-  await page.waitForTimeout(2000);
+  await page.waitForTimeout(1000);
+  await expect(page.getByText('You have been successfully subscribed!')).not.toBeVisible();
+
+  // test by correct pattern
   await page.getByRole('textbox', { name: 'Your email address' }).fill('e@gmail.com');
-  await page.waitForTimeout(2000);
   await page.locator('#subscribe').click();
-  await page.waitForTimeout(2000);
+  
+  await expect(page.getByText('You have been successfully subscribed!')).toBeVisible();
+  await page.waitForTimeout(1000);
 });
