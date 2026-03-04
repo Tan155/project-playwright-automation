@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 
-test('review', async ({ page }) => {
+test('review_incorrect_input', async ({ page }) => {
      async function scrollToBottom(page) {
           await page.evaluate(async () => {
           await new Promise((resolve) => {
@@ -29,12 +29,40 @@ test('review', async ({ page }) => {
      await page.waitForTimeout(1000);
 
      //test email validation(@)
-     await page.getByRole('textbox', { name: 'Email', exact: true }).fill('d');
-     await page.getByRole('button', { name: 'Submit' }).click();
-     await page.waitForTimeout(1000);
-
      await page.getByRole('textbox', { name: 'Email', exact: true }).fill('d@');
      await page.getByRole('button', { name: 'Submit' }).click();
+     await expect(page.getByText('Success! Your details have been submitted successfully.').first()).not.toBeVisible();
+     await page.waitForTimeout(1000);
+
+});
+
+
+test('review_correct_input', async ({ page }) => {
+     async function scrollToBottom(page) {
+          await page.evaluate(async () => {
+          await new Promise((resolve) => {
+               let totalHeight = 0;
+               const distance = 100;
+               const endAt = 500;
+               const timer = setInterval(() => {
+               window.scrollBy(0, distance);
+               totalHeight += distance;
+               if (totalHeight >= endAt) {
+                    clearInterval(timer);
+                    resolve();
+               }
+               }, 100);
+          });
+          });
+     }
+     await page.goto('https://automationexercise.com/');
+     await expect(page).toHaveURL('https://automationexercise.com/');
+
+     await page.getByRole('link', { name: ' Contact us' }).click();
+     await expect(page).toHaveURL('https://automationexercise.com/contact_us');
+
+     await page.waitForTimeout(1000);
+     await scrollToBottom(page);
      await page.waitForTimeout(1000);
 
      //pass test
